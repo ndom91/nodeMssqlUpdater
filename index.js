@@ -34,7 +34,7 @@ async function writeCountry() {
 
 const main = async () => {
 	for await (country of countries) {
-		writeCountry(country)
+		await writeCountry(country)
 	}
 }
 
