@@ -3,11 +3,11 @@ const sql = require("mssql");
 const countries = require("./countries.json");
 
 const config = {
-	server: process.env.MYSQL_HOST,
-	database: process.env.MYSQL_DATABASE,
-	port: parseInt(process.env.MYSQL_PORT, 10),
-	user: process.env.MYSQL_USER,
-	password: process.env.MYSQL_PASSWORD
+	server: process.env.MSSQL_HOST,
+	database: process.env.MSSQL_DATABASE,
+	port: parseInt(process.env.MSSQL_PORT, 10),
+	user: process.env.MSSQL_USER,
+	password: process.env.MSSQL_PASSWORD
 };
 
 const pool = new sql.ConnectionPool(config);
