@@ -1,6 +1,7 @@
+#!/usr/bin/env node
+
 require("dotenv").config();
 const sql = require("mssql");
-const countries = require("./countries.json");
 
 const config = {
 	server: process.env.MSSQL_HOST,
@@ -17,11 +18,13 @@ pool.on('error', err => {
 	console.error('Err: ', err)
 })
 
-async function writeCountry() {
+async function writeBestellung() {
 	await poolConnect;
 	try {
 		const request = pool.request();
-		const result = await request.query(`update allg_laender set land_lang = '${country.name.toUpperCase()}' where land_kurz like '${country.alpha2.toUpperCase()}'`)
+		// const result = await request.query(`update allg_laender set land_lang = '${country.name.toUpperCase()}' where land_kurz like '${country.alpha2.toUpperCase()}'`)
+		const result = await request.query(`SELECT TOP (10) * FROM bestell_kopf`)
+		console.log(result)
 		if (result.rowsAffected > 0) {
 			console.log(`Successfully updated - ${country.name}`);
 		} else {
@@ -33,9 +36,15 @@ async function writeCountry() {
 }
 
 const main = async () => {
-	for await (country of countries) {
-		await writeCountry(country)
-	}
+	await writeBestellung()
+    // try {
+    //     // make sure that any items are correctly URL encoded in the connection string
+    //     await sql.connect('mssql://sa:$gonnewtelcotest2$@GOLIATHSQL/GONNEWTELCOTEST2')
+    //     const result = await sql.query`select top 10 * from bestell_kopf`
+    //     console.dir(result)
+    // } catch (err) {
+    //     // ... error checks
+    // }
 }
 
 // Workaround for missing top-level await
