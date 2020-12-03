@@ -22,31 +22,34 @@ async function writeBestellung() {
 	await poolConnect;
 	try {
 		const request = pool.request();
-		// const result = await request.query(`update allg_laender set land_lang = '${country.name.toUpperCase()}' where land_kurz like '${country.alpha2.toUpperCase()}'`)
 		const result = await request.query(`SELECT TOP (10) * FROM bestell_kopf`)
-		console.log(result)
-		if (result.rowsAffected > 0) {
-			console.log(`Successfully updated - ${country.name}`);
-		} else {
-			console.error("No rows affected!");
+		// console.log(result)
+		// console.log(typeof result)
+
+		if (result.rowsAffected === 0) {
+			console.error("No rows found")
+			return 
 		}
+
+		result.recordset.forEach(record => {
+			const bestHinweis = record.best_hinweis.substr(0,5)
+			console.log(bestHinweis)
+			console.log(typeof parseInt(bestHinweis))
+			console.log(" ")
+			if (typeof bestHinweis === 'number') {
+				console.log("number!")
+			}
+		})
+
 	} catch (err) {
 		console.error('SQL error', err.originalError.info.message);
 	}
+	pool.close()
 }
 
 const main = async () => {
 	await writeBestellung()
-    // try {
-    //     // make sure that any items are correctly URL encoded in the connection string
-    //     await sql.connect('mssql://sa:$gonnewtelcotest2$@GOLIATHSQL/GONNEWTELCOTEST2')
-    //     const result = await sql.query`select top 10 * from bestell_kopf`
-    //     console.dir(result)
-    // } catch (err) {
-    //     // ... error checks
-    // }
 }
 
-// Workaround for missing top-level await
 main()
 
